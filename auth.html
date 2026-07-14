@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Регистрация / Вход</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0f172a;
+      --card-bg: rgba(30, 41, 59, 0.7);
+      --card-border: rgba(255, 255, 255, 0.1);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #3b82f6;
+      --accent-hover: #2563eb;
+      --input-bg: rgba(15, 23, 42, 0.5);
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: radial-gradient(circle at 15% 50%, rgba(29, 78, 216, 0.15), transparent 25%),
+                  radial-gradient(circle at 85% 30%, rgba(37, 99, 235, 0.1), transparent 25%),
+                  var(--bg-dark);
+      background-size: cover;
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 2rem;
+      overflow: hidden;
+    }
+
+    /* Анимированные шары на фоне */
+    .blob {
+      position: absolute;
+      filter: blur(80px);
+      z-index: -1;
+      opacity: 0.5;
+      animation: float 10s infinite alternate ease-in-out;
+    }
+    .blob-1 {
+      width: 300px; height: 300px;
+      background: #1d4ed8;
+      top: -100px; left: -100px;
+    }
+    .blob-2 {
+      width: 400px; height: 400px;
+      background: #3b82f6;
+      bottom: -150px; right: -100px;
+      animation-delay: -5s;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0) scale(1); }
+      100% { transform: translateY(30px) scale(1.1); }
+    }
+
+    .container {
+      max-width: 420px;
+      width: 100%;
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      padding: 2.5rem;
+      border-radius: 20px;
+      border: 1px solid var(--card-border);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      animation: fadeIn 0.6s ease-out forwards;
+      transition: all 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+      font-weight: 600;
+      font-size: 1.75rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      letter-spacing: -0.025em;
+    }
+
+    .input-group {
+      margin-bottom: 1.25rem;
+      position: relative;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.875rem 1rem;
+      background: var(--input-bg);
+      color: var(--text-main);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      transition: all 0.3s ease;
+      outline: none;
+    }
+    
+    input::placeholder {
+      color: var(--text-muted);
+    }
+
+    input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+
+    button {
+      width: 100%;
+      padding: 0.875rem 1rem;
+      background: linear-gradient(135deg, var(--accent-hover), var(--accent));
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+      margin-top: 0.5rem;
+    }
+
+    button:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.5);
+      background: linear-gradient(135deg, #1e40af, var(--accent-hover));
+    }
+    
+    button:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .link {
+      margin-top: 1.5rem;
+      cursor: pointer;
+      color: var(--text-muted);
+      text-align: center;
+      font-size: 0.9rem;
+      transition: color 0.3s ease;
+    }
+    
+    .link:hover {
+      color: var(--accent);
+    }
+
+    .hidden {
+      display: none !important;
+      opacity: 0;
+    }
+    
+    .visible {
+      display: block;
+      animation: slideDown 0.4s ease forwards;
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+  <script src="auth.js" defer></script>
+</head>
+<body>
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+
+  <!-- РЕГИСТРАЦИЯ -->
+  <div class="container" id="registerContainer">
+    <h2>Создать аккаунт</h2>
+    <div class="input-group">
+      <input type="text" id="regUsername" placeholder="Имя пользователя" />
+    </div>
+    <div class="input-group">
+      <input type="password" id="regPassword" placeholder="Пароль" />
+    </div>
+    <div class="input-group">
+      <input type="email" id="regEmail" placeholder="Почта (example@gmail.com)" />
+    </div>
+    
+    <button id="sendRegCodeBtn" type="button">Отправить код на почту</button>
+    
+    <div class="input-group hidden" id="regCodeWrapper" style="margin-top: 1rem;">
+      <input type="text" id="regCode" placeholder="Код из письма" />
+    </div>
+    <button id="registerBtn" type="button" class="hidden">Зарегистрироваться</button>
+    
+    <div class="link" id="toLogin">Уже есть аккаунт? Войти</div>
+  </div>
+
+  <!-- ВХОД -->
+  <div class="container" id="loginContainer" style="display:none;">
+    <h2>С возвращением</h2>
+    <div class="input-group">
+      <input type="text" id="loginUsername" placeholder="Имя пользователя" />
+    </div>
+    <div class="input-group">
+      <input type="password" id="loginPassword" placeholder="Пароль" />
+    </div>
+    
+    <button id="loginBtn" type="button">Войти</button>
+    
+    <div class="link" id="toRegister">Нет аккаунта? Регистрация</div>
+  </div>
+
+  <script src="profile-widget.js"></script>
+</body>
+</html>

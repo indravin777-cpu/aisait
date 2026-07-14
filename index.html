@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Мой сайт</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0f172a;
+      --card-bg: rgba(30, 41, 59, 0.7);
+      --card-border: rgba(255, 255, 255, 0.1);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #3b82f6;
+      --accent-hover: #2563eb;
+    }
+
+    /* Светлая тема */
+    body.light-theme {
+      --bg-dark: #f1f5f9;
+      --card-bg: rgba(255, 255, 255, 0.7);
+      --card-border: rgba(0, 0, 0, 0.1);
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: radial-gradient(circle at 15% 50%, rgba(29, 78, 216, 0.15), transparent 25%),
+                  radial-gradient(circle at 85% 30%, rgba(37, 99, 235, 0.1), transparent 25%),
+                  var(--bg-dark);
+      background-size: cover;
+      background-attachment: fixed;
+      color: var(--text-main);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow-x: hidden;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    /* Анимированные шары на фоне */
+    .blob {
+      position: fixed;
+      filter: blur(80px);
+      z-index: -1;
+      opacity: 0.5;
+      animation: float 10s infinite alternate ease-in-out;
+    }
+    .blob-1 { width: 300px; height: 300px; background: #1d4ed8; top: -100px; left: -100px; }
+    .blob-2 { width: 400px; height: 400px; background: var(--accent); bottom: -150px; right: -100px; animation-delay: -5s; }
+    .blob-3 { width: 250px; height: 250px; background: #4f46e5; top: 40%; left: 50%; transform: translate(-50%, -50%); animation: floatCenter 15s infinite alternate ease-in-out; opacity: 0.3; }
+
+    @keyframes float {
+      0% { transform: translateY(0) scale(1); }
+      100% { transform: translateY(30px) scale(1.1); }
+    }
+    @keyframes floatCenter {
+      0% { transform: translate(-50%, -50%) scale(1); }
+      100% { transform: translate(-45%, -45%) scale(1.2); }
+    }
+
+    .glass-panel {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    }
+
+    header {
+      padding: 1.5rem 2rem;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-radius: 0 0 20px 20px;
+      margin-bottom: 2rem;
+      margin-left: 100px; /* Сдвиг, чтобы не мешать островку */
+      margin-right: 100px;
+    }
+    
+    header h1 { font-weight: 600; letter-spacing: -0.025em; }
+
+    nav { text-align: center; margin-bottom: 2rem; }
+
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      background: linear-gradient(135deg, var(--accent-hover), var(--accent));
+      color: #fff;
+      text-decoration: none;
+      border-radius: 10px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+      cursor: pointer;
+      border: none;
+    }
+    
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.5);
+      background: linear-gradient(135deg, var(--accent-hover), var(--accent));
+      color: #fff;
+    }
+
+    main {
+      flex: 1;
+      max-width: 800px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 0 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    section { padding: 2rem; border-radius: 20px; animation: fadeIn 0.6s ease-out backwards; }
+    section:nth-child(1) { animation-delay: 0.1s; }
+    section:nth-child(2) { animation-delay: 0.2s; }
+    section:nth-child(3) { animation-delay: 0.3s; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 { color: var(--accent); margin-bottom: 1rem; font-weight: 500; }
+    a { color: var(--accent); text-decoration: none; transition: color 0.3s ease; }
+    a:hover { color: var(--accent-hover); text-decoration: underline; }
+    ul { list-style: none; }
+    ul li { margin-bottom: 0.5rem; position: relative; padding-left: 1.5rem; }
+    ul li::before { content: "→"; position: absolute; left: 0; color: var(--accent); }
+
+    footer { text-align: center; padding: 1.5rem; margin-top: 3rem; color: var(--text-muted); border-radius: 20px 20px 0 0; }
+
+    /* Островок профиля слева сверху */
+    #profileWidget {
+      position: fixed;
+      top: 1rem;
+      left: 1rem;
+      z-index: 100;
+    }
+    
+    .profile-island {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0.5rem 1rem 0.5rem 0.5rem;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .profile-island:hover {
+      box-shadow: 0 0 15px rgba(255,255,255,0.1);
+      transform: scale(1.02);
+    }
+    
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      overflow: hidden;
+    }
+    
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .nickname {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    /* ВЫЕЗЖАЮЩАЯ БОКОВАЯ ПАНЕЛЬ */
+    .sidebar-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(4px);
+      z-index: 999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .sidebar-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -300px;
+      width: 260px;
+      height: 100vh;
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      border-right: 1px solid var(--card-border);
+      z-index: 1000;
+      padding: 1.5rem;
+      transition: left 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      display: flex;
+      flex-direction: column;
+      box-shadow: 10px 0 30px rgba(0,0,0,0.1);
+    }
+    .sidebar.active {
+      left: 0;
+    }
+
+    /* Вкладки в сайдбаре -> Экраны */
+    .sidebar-view {
+      display: none;
+      flex-direction: column;
+      height: 100%;
+      animation: fadeInView 0.3s ease;
+    }
+    .sidebar-view.active {
+      display: flex;
+    }
+    @keyframes fadeInView { from{opacity:0; transform:translateX(10px);} to{opacity:1; transform:translateX(0);} }
+
+    .sidebar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    .sidebar-header h2 { margin: 0; font-size: 1.2rem; font-weight: 500; }
+    .close-btn { background: none; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer; transition: color 0.3s; }
+    .close-btn:hover { color: var(--accent); }
+    .back-btn { background: none; border: none; color: var(--text-muted); font-size: 0.9rem; cursor: pointer; display:flex; align-items:center; gap:5px; transition: color 0.3s; }
+    .back-btn:hover { color: var(--accent); }
+
+    .menu-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .menu-btn {
+      background: transparent;
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 0.75rem 1rem;
+      border-radius: 6px;
+      font-size: 1rem;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-weight: 400;
+    }
+    .menu-btn:hover {
+      background: rgba(128,128,128,0.05);
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateX(3px);
+    }
+
+    .settings-group { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.5rem; }
+    .settings-group label { font-size: 0.85rem; color: var(--text-muted); }
+    .settings-group input[type="text"] {
+      padding: 0.75rem; border-radius: 8px; border: 1px solid var(--card-border);
+      background: rgba(0,0,0,0.1); color: var(--text-main); outline: none;
+    }
+
+    .color-picker { display: flex; gap: 10px; }
+    .color-circle {
+      width: 30px; height: 30px; border-radius: 50%; cursor: pointer;
+      border: 2px solid transparent; transition: transform 0.2s;
+    }
+    .color-circle:hover { transform: scale(1.2); }
+    .color-circle.active { border-color: #fff; box-shadow: 0 0 10px rgba(255,255,255,0.5); }
+
+    .file-input-wrapper { position: relative; overflow: hidden; display: inline-block; }
+    .file-input-wrapper input[type="file"] {
+      position: absolute; left: 0; top: 0; opacity: 0; cursor: pointer; height: 100%; width: 100%;
+    }
+    
+    .logout-btn {
+      background: rgba(239, 68, 68, 0.1); color: #ef4444; padding: 0.75rem;
+      text-align: center; border-radius: 8px; cursor: pointer; margin-top: auto; border: 1px solid rgba(239,68,68,0.2);
+      transition: all 0.3s; font-weight: 500;
+    }
+    .logout-btn:hover { background: rgba(239, 68, 68, 0.2); }
+
+  </style>
+</head>
+<body>
+  <!-- Анимированный фон -->
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+
+  <!-- ОСТРОВОК ПРОФИЛЯ -->
+  <div id="profileWidget">
+    <a href="auth.html" class="btn" id="loginRedirectBtn">Войти в аккаунт</a>
+    
+    <div class="profile-island glass-panel" id="islandBtn" style="display: none;">
+      <div class="avatar" id="islandAvatar">?</div>
+      <div class="nickname" id="islandNickname">Пользователь</div>
+    </div>
+  </div>
+
+  <!-- ВЫЕЗЖАЮЩИЙ САЙДБАР -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  <div class="sidebar" id="sidebar">
+    
+    <!-- ЭКРАН 1: ГЛАВНОЕ МЕНЮ -->
+    <div class="sidebar-view active" id="view-main">
+      <div class="sidebar-header">
+        <h2>Меню</h2>
+        <button class="close-btn" id="closeSidebarBtn">&times;</button>
+      </div>
+      <div class="menu-list">
+        <button class="menu-btn nav-btn" data-target="view-profile">👤 Мой Профиль</button>
+        <button class="menu-btn nav-btn" data-target="view-settings">⚙️ Настройки</button>
+      </div>
+    </div>
+
+    <!-- ЭКРАН 2: ПРОФИЛЬ -->
+    <div class="sidebar-view" id="view-profile">
+      <div class="sidebar-header">
+        <button class="back-btn nav-btn" data-target="view-main">← Назад</button>
+        <h2>Профиль</h2>
+      </div>
+      <div class="settings-group">
+        <label>Фото профиля</label>
+        <div class="file-input-wrapper">
+          <button class="btn" style="width: 100%;">Выбрать новое фото</button>
+          <input type="file" id="avatarUpload" accept="image/*">
+        </div>
+      </div>
+      <div class="settings-group">
+        <label>Никнейм (раз в 3 дня)</label>
+        <input type="text" id="newNicknameInput" placeholder="Новый ник">
+        <button class="btn" id="saveNicknameBtn" style="margin-top:0.5rem;">Сохранить ник</button>
+        <div id="nicknameMsg" style="font-size: 0.75rem; color: #ef4444; margin-top:0.25rem;"></div>
+      </div>
+      
+      <div class="logout-btn" id="logoutBtn">🚪 Выйти из аккаунта</div>
+    </div>
+
+    <!-- ЭКРАН 3: НАСТРОЙКИ -->
+    <div class="sidebar-view" id="view-settings">
+      <div class="sidebar-header">
+        <button class="back-btn nav-btn" data-target="view-main">← Назад</button>
+        <h2>Настройки</h2>
+      </div>
+      <div class="settings-group">
+        <label>Цвет элементов</label>
+        <div class="color-picker" id="colorPicker">
+          <div class="color-circle" style="background: #3b82f6;" data-color="#3b82f6" data-hover="#2563eb"></div>
+          <div class="color-circle" style="background: #10b981;" data-color="#10b981" data-hover="#059669"></div>
+          <div class="color-circle" style="background: #f43f5e;" data-color="#f43f5e" data-hover="#e11d48"></div>
+          <div class="color-circle" style="background: #8b5cf6;" data-color="#8b5cf6" data-hover="#7c3aed"></div>
+        </div>
+      </div>
+      <div class="settings-group">
+        <label>Внешний вид</label>
+        <button class="btn" id="toggleThemeBtn">Переключить тему</button>
+      </div>
+    </div>
+
+  </div>
+
+  <header class="glass-panel">
+    <h1>Добро пожаловать на мой сайт</h1>
+  </header>
+
+  <main>
+    <section class="glass-panel">
+      <h2>Обо мне</h2>
+      <p>Здесь можно разместить короткую биографию, интересы, проекты и другую информацию о вас. Добро пожаловать в современный веб!</p>
+    </section>
+
+    <section class="glass-panel">
+      <h2>Проекты</h2>
+      <ul>
+        <li><a href="#">Новый стильный проект</a></li>
+        <li><a href="#">Интересная разработка</a></li>
+        <li><a href="#">Эксперимент с дизайном</a></li>
+      </ul>
+    </section>
+
+    <section class="glass-panel">
+      <h2>Контакты</h2>
+      <p>Email: <a href="mailto:zbswbw1@gmail.com">zbswbw1@gmail.com</a></p>
+    </section>
+  </main>
+
+  <footer class="glass-panel">
+    © 2026 Мой современный сайт
+  </footer>
+
+  <script src="profile-widget.js"></script>
+</body>
+</html>
