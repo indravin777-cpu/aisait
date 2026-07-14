@@ -3,10 +3,16 @@ const cors = require('cors');
 const path = require('path');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = parseInt(process.env.PORT, 10) || 3000;
 
 app.use(cors());
 app.use(express.json());
+
+// Проверочный эндпоинт для Railway
+app.get('/ping', (req, res) => {
+  res.send('pong! Server is alive!');
+});
+
 app.use(express.static(path.join(__dirname))); // Serve auth.html and auth.js
 
 // Временное хранилище кодов: { email: { code, expiresAt } }
