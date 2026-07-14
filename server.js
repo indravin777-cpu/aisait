@@ -3,7 +3,8 @@ const cors = require('cors');
 const path = require('path');
 
 const app = express();
-const PORT = parseInt(process.env.PORT, 10) || 3000;
+const PORT = process.env.PORT || 3000;
+console.log('ENV PORT value:', process.env.PORT);
 
 app.use(cors());
 app.use(express.json());
