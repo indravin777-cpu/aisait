@@ -84,6 +84,6 @@ app.post('/verify-code', (req, res) => {
   res.json({ success: true });
 });
 
-app.listen(PORT, '0.0.0.0', () => {
+app.listen(PORT, () => {
   console.log(`Сервер запущен на порту ${PORT}`);
 });
